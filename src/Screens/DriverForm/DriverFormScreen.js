@@ -51,17 +51,16 @@ const DriverFormScreen = (props) => {
   }
 
   const updateDriver = () => {
-    const data = new FormData();
-    data.append('name', name);
-    data.append('license_type', licenceType);
-    data.append('age', age);
-    data.append('license_expiry', moment(date).format('yyyy-MM-DD'));
-    data.append('phone', phonenumber);
-
-
+    let data = {
+      'name': name,
+      'license_type': licenceType,
+      'age': age,
+      'license_expiry': moment(date).format('yyyy-MM-DD'),
+      'phone': phonenumber,
+    }
     dispatch(editDriversService(
-      props.route.params?.params?.id,
       data,
+      props.route.params?.params?.id,
       success => {
         console.log("successsuccesssuccess------>", success)
         if ([201, 200, 202].includes(success?.status)) {

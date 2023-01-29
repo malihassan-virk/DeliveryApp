@@ -1,42 +1,40 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
-  Platform,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { Header } from '../../Components/Header';
 import { DriverItem } from './DriverItem';
-import { getAllDriversService } from '../../Redux/Actions/driver/driverAction';
+import { getDriverDetailsService } from '../../Redux/Actions/driver/driverAction';
 import FONTS from '../../Constants/FONTS';
 import COLORS from '../../Constants/COLORS';
 
 const ManageScreen = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const item = props.route.params?.params;
-  const authData = useSelector(
-    state => state.getauthList.data
+  const [item,setItem] =useState(props.route.params?.params)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData()
+    }, [])
   );
 
-  useEffect(() => {
-  }, []);
-
+ 
   const fetchData = () => {
-    dispatch(getAllDriversService(
-      {
-        page:1
-      },
+    dispatch(getDriverDetailsService(
+      props.route.params?.params?.id,
       success => {
-        console.log("success",success)
-        let feedData = success?.data ? success?.data : []
-        setNewsFeed(feedData)
-        setRefreshing(false);
-
+        console.log("successsuccesssuccess------>", success)
+        if ([201, 200, 202].includes(success?.status)) {
+          setItem(success?.data)
+        }
+        console.log("success success==>", success)
       },
       error => {
-        setRefreshing(false);
+        console.log("error in user updating==>", error?.response)
       }
     ));
   }

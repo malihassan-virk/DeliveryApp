@@ -40,7 +40,7 @@ export const createDriversService = (params, cbSuccess, cbError) => (dispatch) =
       })
 }
 
-export const editDriversService = (id,params, cbSuccess, cbError) => (dispatch) => {
+export const editDriversService = (params,id, cbSuccess, cbError) => (dispatch) => {
   var endpoint = `/drivers/${id}`;
   console.log('update driver EndPoint:===>>>>>', endpoint)
   APIs.apiAuth.put(endpoint,params)
@@ -63,6 +63,26 @@ export const deleteDriversService = (id, cbSuccess, cbError) => (dispatch) => {
   var endpoint = `/drivers/${id}`;
   console.log('delete driver EndPoint:===>>>>>', endpoint)
   APIs.apiAuth.delete(endpoint)
+      .then((data) => {
+          if (cbSuccess) {
+              cbSuccess(data)
+              return data
+          }
+      })
+      .catch((error) => {
+          console.log("delete driver Error--->>>>>", error);
+          if (cbError) {
+              cbError(error)
+              return error
+          }
+      })
+}
+
+
+export const getDriverDetailsService = (id, cbSuccess, cbError) => (dispatch) => {
+  var endpoint = `/drivers/${id}`;
+  console.log('delete driver EndPoint:===>>>>>', endpoint)
+  APIs.apiAuth.get(endpoint)
       .then((data) => {
           if (cbSuccess) {
               cbSuccess(data)
