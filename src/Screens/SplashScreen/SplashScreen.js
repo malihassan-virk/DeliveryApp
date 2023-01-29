@@ -23,11 +23,14 @@ const SplashScreen = ({ navigation }) => {
         if (token) {
             dispatch(updateUserData({ token: token, user: userData }));
             console.log("JSON.parse(userData)", userData)
-            navigation.navigate('HomeScreen', {
-            })
+            navigation.reset({
+                index: 0, routes: [{ name: 'HomeScreen' }],
+            });
 
         } else {
-            navigation.replace('LoginScreen');
+            navigation.reset({
+                index: 0, routes: [{ name: 'LoginScreen' }],
+            });
         }
     };
 
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor:"white"
+        backgroundColor: "white"
     },
     image: {
         height: 100,

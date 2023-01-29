@@ -11,7 +11,6 @@ import {
 import { useDispatch } from 'react-redux';
 import { Header } from '../../Components/Header';
 import TextField from '../../Components/TextField';
-import { registerService } from '../../Redux/Actions/auth/authActions';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import FONTS from '../../Constants/FONTS';
@@ -29,15 +28,15 @@ const DriverFormScreen = (props) => {
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
 
-useEffect(()=>{
-if(props.route.params?.params){
-  setname(props.route.params?.params?.name)
-  setage(props.route.params?.params?.age?.toString())
-  setphonenumber(props.route.params?.params?.phone)
-  setlicenceType(props.route.params?.params?.license_type)
-  setDate(props.route.params?.params?.created_at)
-}
-},[])
+  useEffect(() => {
+    if (props.route.params?.params) {
+      setname(props.route.params?.params?.name)
+      setage(props.route.params?.params?.age?.toString())
+      setphonenumber(props.route.params?.params?.phone)
+      setlicenceType(props.route.params?.params?.license_type)
+      setDate(props.route.params?.params?.created_at)
+    }
+  }, [])
 
   const onTextChange = (text, type) => {
     if (type == "name") {
@@ -50,7 +49,7 @@ if(props.route.params?.params){
       setphonenumber(text)
     }
   }
-  
+
   const updateDriver = () => {
     const data = new FormData();
     data.append('name', name);
@@ -64,8 +63,8 @@ if(props.route.params?.params){
       props.route.params?.params?.id,
       data,
       success => {
-        console.log("successsuccesssuccess------>",success)
-        if ([201,200,202].includes(success?.status)) {
+        console.log("successsuccesssuccess------>", success)
+        if ([201, 200, 202].includes(success?.status)) {
           alert("Successfully updated")
           navigation.goBack()
         }
@@ -74,9 +73,7 @@ if(props.route.params?.params){
       error => {
         console.log("error in user updating==>", error?.response)
       }
-
     ));
-
   }
 
   const driverAction = () => {
@@ -91,7 +88,7 @@ if(props.route.params?.params){
     dispatch(createDriversService(
       data,
       success => {
-        if ([201,200,202].includes(success?.status)) {
+        if ([201, 200, 202].includes(success?.status)) {
           alert("Successfully created")
           navigation.goBack()
         }
@@ -109,7 +106,6 @@ if(props.route.params?.params){
     setDate(date)
   }
 
-
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -117,7 +113,7 @@ if(props.route.params?.params){
         nameIcon={false}
         backIcon={true}
         backonPress={() => { navigation.goBack() }}
-        manageOnPress={() => {props.route.params?.params ?  updateDriver() : driverAction() }}
+        manageOnPress={() => { props.route.params?.params ? updateDriver() : driverAction() }}
         manageIcon={true}
         manageText={props.route.params?.params ? "Update" : "Create New"}
       />
@@ -144,67 +140,38 @@ if(props.route.params?.params){
           errorMsg={"Please enter your phonenumber"}
         />
 
-
-      
-
-
-
-<Text style={{ fontWeight: Platform.OS === "android" ? "700" : "500", fontSize: FONTS.Label, color: COLORS.darkGray, marginTop: 0, marginStart: 10,fontWeight:"500" }}>License Expiry</Text>
-        <View style={{  height: 45, marginTop: 2, }}>
-          <Pressable style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: COLORS.black,
-            borderWidth: 1,
-            borderColor: COLORS.black,
-            marginRight: 2,
-          }}
+        <Text style={styles.inputTitle}>License Expiry</Text>
+        <View style={styles.buttonView}>
+          <Pressable style={styles.buttonInput}
             onPress={() => {
               setTimeout(() => {
                 setIsDatePickerVisible(true)
               }, 500);
             }}
           >
-            <Text style={{ fontSize: FONTS.Label, color:  COLORS.white }}>
-            {date ? moment(date).format("yyyy-MMM-DD") : moment(new Date()).format("yyyy-mm-dd")}
-              </Text>
+            <Text style={styles.title}>
+              {date ? moment(date).format("yyyy-MMM-DD") : moment(new Date()).format("yyyy-mm-dd")}
+            </Text>
           </Pressable>
-         
 
         </View>
 
-        <Text style={{ fontWeight: Platform.OS === "android" ? "700" : "500", fontSize: FONTS.Label, color: COLORS.darkGray, marginTop: 0, marginStart: 10,fontWeight:"500" }}>Licence type</Text>
-        <View style={{ flexDirection: "row", height: 45, marginTop: 2, }}>
-          <Pressable style={{
-            flex: 1 / 2,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: licenceType === "Two Wheeler" ? COLORS.black : "transparent",
-            borderWidth: 1,
-            borderColor: licenceType === "Two Wheeler" ? COLORS.black : COLORS.desertStorm,
-            marginRight: 2,
-          }}
+        <Text style={styles.inputTitle}>Licence type</Text>
+        <View style={[styles.buttonView, { flexDirection: "row" }]}>
+          <Pressable style={styles.actionButton(licenceType === "Two Wheeler")}
             onPress={() => {
               setlicenceType('Two Wheeler')
             }}
           >
-            <Text style={{ fontSize: FONTS.Label, color: licenceType === "Two Wheeler" ? COLORS.white : COLORS.darkGray }}>Two Wheeler</Text>
+            <Text style={
+              styles.actionTitle(licenceType === "Two Wheeler")}>Two Wheeler</Text>
           </Pressable>
-          <Pressable style={{
-            flex: 1 / 2,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: licenceType === "Four Wheeler" ? COLORS.black : "transparent",
-             borderWidth: 1,
-            borderColor: licenceType === "Four Wheeler" ? COLORS.black : COLORS.desertStorm,
-            marginLeft: 2,
-          }}
+          <Pressable style={styles.actionButton(licenceType === "Four Wheeler")}
             onPress={() => {
               setlicenceType('Four Wheeler')
             }}
           >
-            <Text style={{ fontSize: FONTS.Labels, color: licenceType === "Four Wheeler" ? COLORS.white : COLORS.darkGray }}>Four Wheeler</Text>
+            <Text style={styles.actionTitle(licenceType === "Four Wheeler")}>Four Wheeler</Text>
           </Pressable>
 
 
@@ -239,6 +206,45 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white"
   },
+  inputTitle: {
+    fontWeight: Platform.OS === "android" ? "700" : "500",
+    fontSize: FONTS.Label,
+    color: COLORS.darkGray,
+    marginTop: 0,
+    marginStart: 10,
+    fontWeight: "500",
+    marginTop: 10
+  },
+  buttonInput: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.black,
+    borderWidth: 1,
+    borderColor: COLORS.black,
+    marginRight: 2,
+  },
+  title: {
+    fontSize: FONTS.Label,
+    color: COLORS.white
+  },
+  buttonView: {
+    height: 45,
+    marginTop: 2,
+  },
+  actionTitle: selected => ({
+    fontSize: FONTS.Label,
+    color: selected ? COLORS.white : COLORS.darkGray
+  }),
+  actionButton: selected => ({
+    flex: 1 / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: selected ? COLORS.black : "transparent",
+    borderWidth: 1,
+    borderColor: selected ? COLORS.black : COLORS.desertStorm,
+    marginLeft: 2,
+  })
 });
 
 export default DriverFormScreen;

@@ -9,7 +9,7 @@ import {
   Platform,
   Text
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Header } from '../../Components/Header';
 import { DriverItem } from './DriverItem';
 import { getAllDriversService } from '../../Redux/Actions/driver/driverAction';
@@ -23,13 +23,6 @@ const ManageScreen = () => {
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [newsFeed, setNewsFeed] = useState([])
-  const [isNextPage, setIsNextPage] = useState(false)
-  const [pageNumber, setPageNumber] = useState(1)
-  const [extraDataAvailble, setExtraDataAvailble] = useState(false)
-
-  const authData = useSelector(
-    state => state.getauthList.data
-  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -45,10 +38,10 @@ const ManageScreen = () => {
   const fetchData = () => {
     dispatch(getAllDriversService(
       {
-        page:1
+        page: 1
       },
       success => {
-        console.log("success",success)
+        console.log("success", success)
         let feedData = success?.data ? success?.data : []
         setNewsFeed(feedData)
         setRefreshing(false);
@@ -74,19 +67,19 @@ const ManageScreen = () => {
     navigation.reset({
       index: 0,
       routes: [{ name: 'LoginScreen' }],
-      });
-    }
+    });
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
-           name={"Your Listing"}
-           nameIcon={false}
-           backIcon={true}
-           backonPress={() => { navigation.goBack() }}
-           manageOnPress={() => {logoutAction() }}
-           manageIcon={true}
-           manageText={"Log Out"}
+        name={"Your Listing"}
+        nameIcon={false}
+        backIcon={true}
+        backonPress={() => { navigation.goBack() }}
+        manageOnPress={() => { logoutAction() }}
+        manageIcon={true}
+        manageText={"Log Out"}
       />
       <FlatList
         data={newsFeed}
@@ -97,8 +90,8 @@ const ManageScreen = () => {
               item={item}
               name={item?.name}
               onPress={() => { navigation.navigate('DriverDetailsScreen', { params: item }) }}
-              callBackAfterDelete={()=>{onPullToRefresh()}}
-              editDriver={()=>{
+              callBackAfterDelete={() => { onPullToRefresh() }}
+              editDriver={() => {
                 navigation.navigate('DriverFormScreen', { params: item })
               }}
             />
@@ -122,17 +115,17 @@ const ManageScreen = () => {
         }}
       />
 
-<Pressable style={styles.floatingButton}
-                            onPress={() => {
-                              navigation.navigate('DriverFormScreen',{
-                                params:null
-                              })
-                              }} >
-                             <Text
-                    style={[styles.content]}>
-                      {"Create a driver"}
-                      </Text>
-                        </Pressable>
+      <Pressable style={styles.floatingButton}
+        onPress={() => {
+          navigation.navigate('DriverFormScreen', {
+            params: null
+          })
+        }} >
+        <Text
+          style={[styles.content]}>
+          {"Create a driver"}
+        </Text>
+      </Pressable>
 
     </SafeAreaView>
   )
@@ -144,16 +137,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white"
   },
-  content:{
+  content: {
     fontWeight: "500",
     fontSize: FONTS.Body,
     color: COLORS.white,
-    textAlign:"center"
+    textAlign: "center"
   },
   floatingButton: {
-    width:150,
+    width: 150,
     height: 40,
-    backgroundColor:COLORS.black,
+    backgroundColor: COLORS.black,
     justifyContent: "center",
     alignItems: "center",
     position: 'absolute',
@@ -164,7 +157,7 @@ const styles = StyleSheet.create({
     shadowOpacity: Platform.OS == "ios" ? 0.2 : 1,
     shadowRadius: 3,
     elevation: Platform.OS == "ios" ? 0 : 10,
-},
+  },
 });
 
 export default ManageScreen;

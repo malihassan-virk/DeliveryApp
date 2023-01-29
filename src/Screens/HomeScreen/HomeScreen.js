@@ -7,6 +7,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import ActivityLoader from '../../Components/ActivityLoader';
 import { Header } from '../../Components/Header';
 import { getAllFlightService } from '../../Redux/Actions/home/homeAction';
 
@@ -16,6 +17,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [newsFeed, setNewsFeed] = useState([])
   const [isNextPage, setIsNextPage] = useState(false)
   const [pageNumber, setPageNumber] = useState(1)
@@ -26,6 +28,7 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
+    setLoader(true);
     fetchData(1)
   }, []);
 
@@ -41,10 +44,12 @@ const HomeScreen = () => {
         setIsNextPage(success?.data?.next ? true : false)
         setPageNumber(success?.data?.next ? pageNumber + 1 : 1)
         setRefreshing(false);
+        setLoader(false)
         setExtraDataAvailble(!extraDataAvailble)
       },
       error => {
         setRefreshing(false);
+        setLoader(false)
       }
     ));
   }
@@ -105,6 +110,10 @@ const HomeScreen = () => {
         onEndReached={() => {
           onEndToLoadMoreData()
         }}
+      />
+      <ActivityLoader
+        style={{}}
+        state={loader}
       />
     </SafeAreaView>
   )
