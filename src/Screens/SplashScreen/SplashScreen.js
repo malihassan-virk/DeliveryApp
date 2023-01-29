@@ -15,7 +15,7 @@ const SplashScreen = ({ navigation }) => {
 
 
     const isLogged = async () => {
-        //AsyncStorage.clear()
+       // AsyncStorage.clear()
         let token = await AsyncStorage.getItem('userToken');
         let userData = await AsyncStorage.getItem('userData');
         token = JSON.parse(token);
