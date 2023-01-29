@@ -13,6 +13,10 @@ export const registerService = (data, cbSuccess, cbError) => {
         method: 'POST',
         url: `${API_BaseURL}/register`,
         data: data,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': "application/json",
+        }
       });
       if (response.data) {
         if ([200, 201, 202].includes(response?.status)) {
@@ -43,14 +47,18 @@ export const loginService = (data, cbSuccess, cbError) => {
         method: 'POST',
         url: `${API_BaseURL}/login`,
         data: data,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': "application/json",
+        }
       });
       if (response.data) {
-        if(response?.data.message == "Wrong Credentials") {
+        if (response?.data.message == "Wrong Credentials") {
           if (cbError) cbError(err)
           return;
         }
         if ([200, 201, 202].includes(response?.status)) {
-          console.log("jshjkashdjksh",response)
+          console.log("jshjkashdjksh", response)
           AsyncStorage.setItem('userToken', JSON.stringify(response.data.token));
           AsyncStorage.setItem('userData', JSON.stringify(response.data.user));
           APIs.apiAuth.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;

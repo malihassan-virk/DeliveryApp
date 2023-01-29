@@ -84,6 +84,7 @@ const ManageScreen = () => {
       <FlatList
         data={newsFeed}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom:10}}
         renderItem={({ item, index }) => {
           return (
             <DriverItem
