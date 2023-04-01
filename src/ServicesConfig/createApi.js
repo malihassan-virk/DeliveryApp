@@ -6,7 +6,7 @@ var apiAuth = axios.create({
 	headers: {
 		'Cache-Control': 'no-cache',
 		'Accept': 'application/json',
-		'Content-Type': 'multipart/form-data',
+		//'Content-Type': 'multipart/form-data',
 		Authorization: ``
 	},
 	timeout: 500000
